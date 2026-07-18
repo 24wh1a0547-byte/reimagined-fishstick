@@ -9,5 +9,4 @@ public class AtsCheckerBackendApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(AtsCheckerBackendApplication.class, args);
 	}
-
 }
