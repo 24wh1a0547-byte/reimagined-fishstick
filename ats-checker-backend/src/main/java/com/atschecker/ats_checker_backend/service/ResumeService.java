@@ -5,7 +5,8 @@ import com.atschecker.ats_checker_backend.util.PdfUtil;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.*;
+import java.util.List;
+import java.util.Map;
 
 @Service
 public class ResumeService {
@@ -15,30 +16,16 @@ public class ResumeService {
 
         String resumeText = PdfUtil.extractText(resume);
 
-        System.out.println("=========== RESUME ===========");
-        System.out.println(resumeText);
+        Map<String, Object> result =
+                ATSAnalyzer.analyze(resumeText, jobDescription);
 
         ATSResponse response = new ATSResponse();
 
-        response.setScore(80);
-
-        response.setMatchedSkills(Arrays.asList(
-                "Java",
-                "Spring Boot"
-        ));
-
-        response.setMissingSkills(Arrays.asList(
-                "Docker",
-                "AWS"
-        ));
-
-        response.setSuggestions(Arrays.asList(
-                "Learn Docker",
-                "Mention AWS Projects"
-        ));
+        response.setScore((Integer) result.get("score"));
+        response.setMatchedSkills((List<String>) result.get("matchedSkills"));
+        response.setMissingSkills((List<String>) result.get("missingSkills"));
+        response.setSuggestions((List<String>) result.get("suggestions"));
 
         return response;
-
     }
-
 }
